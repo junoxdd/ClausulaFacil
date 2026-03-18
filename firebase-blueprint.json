@@ -1,0 +1,90 @@
+{
+  "entities": {
+    "ContractRecord": {
+      "title": "ContractRecord",
+      "description": "A contract analysis record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the contract"
+        },
+        "userId": {
+          "type": "string",
+          "description": "The user ID of the owner"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation date"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the contract"
+        },
+        "text": {
+          "type": "string",
+          "description": "The raw text of the contract"
+        },
+        "analysis": {
+          "type": "object",
+          "description": "The analysis result from Gemini"
+        },
+        "folder": {
+          "type": "string",
+          "description": "Folder name for organization"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tags for organization"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Em Negociação", "Assinado", "Cancelado", "Revisão Pendente"],
+          "description": "Status of the contract"
+        }
+      },
+      "required": ["id", "userId", "date", "title", "text", "analysis"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile and subscription data",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The user ID"
+        },
+        "plan": {
+          "type": "string",
+          "enum": ["free", "pro", "unlimited"],
+          "description": "Subscription plan"
+        },
+        "analysesCount": {
+          "type": "number",
+          "description": "Number of analyses performed"
+        },
+        "autoDeleteDays": {
+          "type": "number",
+          "description": "Days after which contracts are auto-deleted"
+        }
+      },
+      "required": ["userId", "plan", "analysesCount"]
+    }
+  },
+  "firestore": {
+    "/contracts/{contractId}": {
+      "schema": {
+        "$ref": "#/entities/ContractRecord"
+      },
+      "description": "Stores contract analysis records for users"
+    },
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores user profiles and subscription data"
+    }
+  }
+}
